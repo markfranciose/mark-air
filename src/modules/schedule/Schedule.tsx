@@ -23,25 +23,35 @@ export default function Schedule() {
   console.log(coolData);
 
   function handleDrag(x: any) {
+    console.log(x);
     const { destination, source } = x;
     if (!destination) { return; }
     const flightToFlight = destination.droppableId === 'flight' && source.droppableId === 'flight';
-    // const rotationToRotation = source.droppableId === 'rotation' &&
+    const rotationToRotation = source.droppableId === 'rotation' && source.droppableId === 'rotation';
     const rotationToFlight = destination.droppableId === 'flight' && source.droppableId === 'rotation';
     const flightToRotation = destination.droppableId === 'rotation' && source.droppableId === 'flight';
     if (flightToFlight) { return; }
-    if (rotationToFlight) { removeFromRotation(); }
+    if (rotationToFlight) { removeFromRotation(x.draggableId); }
     if (flightToRotation) { addFlightToRotation(x.draggableId); }
+    if (rotationToRotation) { reorderRotation(x.source.index, x.destination.index); }
     // setRotation([x.draggableId]);
   }
 
-  function removeFromRotation() {
-    setRotation([]);
+  function removeFromRotation(flightId: string) {
+    setRotation(rotation.filter((r: any) => r.id !== flightId));
   }
 
   function addFlightToRotation(flightId: string) {
     const flight = allFlights.find((x: any) => x.id === flightId);
-    setRotation([flight]);
+    setRotation([...rotation, flight]);
+  }
+
+  function reorderRotation(startIndex: number, endIndex: number) {
+    const newRotation = Array.from(rotation);
+    const [removed] = newRotation.splice(startIndex, 1);
+    newRotation.splice(endIndex, 0, removed);
+
+    setRotation(newRotation);
   }
 
   return (

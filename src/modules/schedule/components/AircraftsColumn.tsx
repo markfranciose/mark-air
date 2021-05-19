@@ -19,7 +19,7 @@ export default function AircraftsColumn({
   return (
     <div>
       { isLoading && <CircularProgress /> }
-      { isError && <ErrorCard /> }
+      { isError && <ErrorCard errorMessage="Planes failed to fetch!" /> }
       { isDone
         && aircrafts.map((a: any) => <p key={a.ident}>{a.ident}</p>) }
     </div>

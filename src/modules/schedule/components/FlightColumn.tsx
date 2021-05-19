@@ -1,6 +1,8 @@
 import React from 'react';
 import { CircularProgress } from '@material-ui/core';
 
+import { Draggable } from 'react-beautiful-dnd';
+
 import ErrorCard from '../shared/ErrorCard';
 
 interface FlightColumnProps {
@@ -18,9 +20,26 @@ export default function FlightColumn({
   return (
     <div>
       { isLoading && <CircularProgress /> }
-      { isError && <ErrorCard /> }
+      { isError && <ErrorCard errorMessage="Flights Failed to Fetch!" /> }
       { isDone
-        && flights.map((a: any) => <p key={a.id}>{a.id}</p>) }
+          && flights.map((a: any, index: number) => (
+            <Draggable
+              key={a.id}
+              draggableId={a.id}
+              index={index}
+            >
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                >
+                  {a.id}
+                </div>
+              )}
+            </Draggable>
+          ))}
+
     </div>
   );
 }

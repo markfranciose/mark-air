@@ -22,7 +22,6 @@ export default function Schedule() {
   };
 
   function handleDrag(x: any) {
-    console.log(x);
     const { destination, source } = x;
     if (!destination) { return; }
     const flightToFlight = destination.droppableId === 'flight' && source.droppableId === 'flight';
@@ -30,14 +29,17 @@ export default function Schedule() {
     const rotationToFlight = destination.droppableId === 'flight' && source.droppableId === 'rotation';
     const flightToRotation = destination.droppableId === 'rotation' && source.droppableId === 'flight';
     if (flightToFlight) { return; }
-    if (rotationToFlight) { removeFromRotation(x.draggableId); }
-    if (flightToRotation) { addFlightToRotation(x.draggableId); }
-    if (rotationToRotation) { reorderRotation(x.source.index, x.destination.index); }
-    // setRotation([x.draggableId]);
+
+    if (rotationToFlight) { removeFromRotation(x.draggableId); } else if (rotationToRotation) {
+      reorderRotation(x.source.index, x.destination.index);
+    } else if (flightToRotation) {
+      addFlightToRotation(x.draggableId);
+    }
   }
 
   function removeFromRotation(flightId: string) {
-    setRotation(rotation.filter((r: any) => r.id !== flightId));
+    const newR = rotation.filter((r: any) => r.id !== flightId);
+    setRotation(newR);
   }
 
   function addFlightToRotation(flightId: string) {
@@ -51,7 +53,7 @@ export default function Schedule() {
     newRotation.splice(endIndex, 0, removed);
 
     setRotation(newRotation);
-  }
+  
 
   return (
     <>
@@ -78,7 +80,7 @@ export default function Schedule() {
           </Droppable>
         </DragDropContext>
       </div>
-      <UsageViz />
+      <UsageViz rotation={rotation} />
     </>
   );
 }

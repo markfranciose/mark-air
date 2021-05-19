@@ -13,28 +13,25 @@ export default function RotationColumn({
   rotation
 }: RotationColumnProps) {
   return (
-    <>
-      <Typography>{selectedAircraftName}</Typography>
-      {rotation.map((a: any, index: number) => {
-        console.log(a);
-        return (
-          <Draggable
-            key={a.id}
-            draggableId={a.id}
-            index={index}
-          >
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-              >
-                <FlightCard flight={a} />
-              </div>
-            )}
-          </Draggable>
-        );
-      })}
-    </>
+    <div style={{ minHeight: 300, width: 240, border: rotation.length ? 'none' : '3px dashed black' }}>
+      <Typography>{`Rotation: ${selectedAircraftName}`}</Typography>
+      {rotation.map((a: any, index: number) => (
+        <Draggable
+          key={a.id}
+          draggableId={a.id}
+          index={index}
+        >
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+            >
+              <FlightCard flight={a} />
+            </div>
+          )}
+        </Draggable>
+      ))}
+    </div>
   );
 }

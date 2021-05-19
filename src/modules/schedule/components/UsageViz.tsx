@@ -1,10 +1,16 @@
 import React from 'react';
+// @ts-ignore
+import HSBar from 'react-horizontal-stacked-bar-chart';
 
 export default function UsageViz({ rotation }: any) {
   if (isValid(rotation)) {
     const util = calculateUtlization(rotation);
-    console.log(util);
-    return <p>{`valid ${util}`}</p>;
+    return (
+      <>
+        <p>{`valid ${util}`}</p>
+        <CoolChart rotation={rotation} />
+      </>
+    );
   }
   return <p>invalid</p>;
 }
@@ -36,4 +42,53 @@ function calculateUtlization(rotation: any) {
   const time = rotation.reduce((acc: number, o: any) => acc + (o.arrivaltime - o.departuretime), 0);
 
   return (time / 86400) * 100;
+}
+
+const COLOR_CODES = {
+  IDLE: 'lightgrey',
+  SCHEDULED: 'lightgreen',
+  TURN: 'lightpurple'
+};
+
+function CoolChart({ rotation }: any) {
+  function generateData() {
+    if (!rotation) {
+      return [{ value: 100, color: COLOR_CODES.IDLE }];
+    }
+
+    if (rotation.length === 0) {
+      return [{ value: 100, color: COLOR_CODES.IDLE }];
+    }
+
+    const flights: any[] = [];
+    const TURNOVER_DATA = { value: 20 * 60, color: COLOR_CODES.TURN };
+    rotation.forEach((flight: any, index: number) => {
+      flights.push({
+        value: flight.arrivaltime - flight.departuretime,
+        color: COLOR_CODES.SCHEDULED
+      });
+      flights.push(TURNOVER_DATA);
+
+      if (index !== rotation.length - 1) {
+        flights.push({
+          value: rotation[index + 1].departuretime - (flight.arrivaltime + (20 * 60)),
+          color: COLOR_CODES.IDLE
+        });
+      }
+    });
+
+    return [
+      { value: rotation[0].departuretime, color: COLOR_CODES.IDLE },
+      ...flights,
+      { value: 86400 - rotation[rotation.length - 1].arrivaltime, color: COLOR_CODES.IDLE }
+    ];
+  }
+
+  const data = generateData();
+  console.log(data);
+  return (
+    <HSBar
+      data={data}
+    />
+  );
 }

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import idx from 'idx';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { Typography } from '@material-ui/core';
 
 import DateHeader from './components/DateHeader';
 import AircraftsColumn from './components/AircraftsColumn';
@@ -15,6 +17,8 @@ export default function Schedule() {
   const aircraftData = useAirplanes();
   const flightData = useFlights();
   const allFlights = flightData.data || [];
+
+  const SELECTED_AIRCRAFT_NAME = idx(aircraftData, (airData: any) => airData.data[0].ident) || '';
 
   const coolData = {
     state: flightData.state,
@@ -53,11 +57,12 @@ export default function Schedule() {
     newRotation.splice(endIndex, 0, removed);
 
     setRotation(newRotation);
-  
+  }
 
   return (
     <>
       <DateHeader />
+      <UsageViz rotation={rotation} />
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <AircraftsColumn aircraftData={aircraftData} />
         <DragDropContext onDragEnd={handleDrag}>
@@ -65,7 +70,7 @@ export default function Schedule() {
             {(provided) => (
               <div ref={provided.innerRef}>
                 <RotationColumn
-                  selectedAircraftName="hi"
+                  selectedAircraftName={SELECTED_AIRCRAFT_NAME}
                   rotation={rotation}
                 />
               </div>
@@ -80,7 +85,15 @@ export default function Schedule() {
           </Droppable>
         </DragDropContext>
       </div>
-      <UsageViz rotation={rotation} />
+      <Footer />
     </>
+  );
+}
+
+function Footer() {
+  return (
+    <Typography>
+      (c) Rubber Donkey Airlines
+    </Typography>
   );
 }

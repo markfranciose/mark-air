@@ -1,10 +1,10 @@
 import React from 'react';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Typography } from '@material-ui/core';
 
 import { Draggable } from 'react-beautiful-dnd';
 
-import ErrorCard from '../shared/ErrorCard';
-import FlightCard from '../shared/FlightCard';
+import ErrorCard from '../../../shared/ErrorCard';
+import FlightCard from '../../../shared/FlightCard';
 
 interface FlightColumnProps {
   flightData: any;
@@ -19,8 +19,11 @@ export default function FlightColumn({
 
   const { data: flights } = flightData;
   return (
-    <div style={{ height: '80vh', overflow: 'auto' }}>
-      { isLoading && <CircularProgress /> }
+    <div style={{ height: '80vh', width: 300, overflow: 'auto' }}>
+      <Typography>
+        Available Flights
+      </Typography>
+      { isLoading && <CircularProgress data-testid="spinner" /> }
       { isError && <ErrorCard errorMessage="Flights Failed to Fetch!" /> }
       { isDone
           && flights.map((a: any, index: number) => (

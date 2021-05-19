@@ -2,15 +2,7 @@ import React from 'react';
 import {
   Card, CardHeader, CardContent, Typography
 } from '@material-ui/core';
-
-interface FlightType {
-  id: string
-  departuretime: number
-  destination: string
-  origin: string
-  readable_arrival: string
-  readable_departure: string
-}
+import FlightType from '../../../types/flight';
 
 interface FlightCardProps {
   flight: FlightType

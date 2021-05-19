@@ -10,7 +10,7 @@ export default function ErrorCard({
   errorMessage
 }: ErrorCardProps) {
   return (
-    <Card>
+    <Card data-testid="error-card">
       <Error />
       <Typography>
         { errorMessage }

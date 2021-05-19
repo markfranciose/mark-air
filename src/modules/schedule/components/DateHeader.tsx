@@ -1,4 +1,5 @@
 import React from 'react';
+import { Typography } from '@material-ui/core';
 import { NavigateBefore, NavigateNext } from '@material-ui/icons';
 
 export default function DateHeader() {
@@ -7,9 +8,11 @@ export default function DateHeader() {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <NavigateBefore />
-      <p>{TOMORROW.toLocaleString()}</p>
-      <NavigateNext />
+      <NavigateBefore data-testid="nav-back" />
+      <Typography>
+        {`Flight Scheduling: ${TOMORROW.toLocaleString()}`}
+      </Typography>
+      <NavigateNext data-testid="nav-forward" />
     </div>
   );
 }

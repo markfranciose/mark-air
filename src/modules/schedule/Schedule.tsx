@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import idx from 'idx';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { Typography } from '@material-ui/core';
 
 import DateHeader from './components/DateHeader';
 import AircraftsColumn from './components/AircraftsColumn';
-import RotationColumn from './components/RotationColumn';
-import FlightColumn from './components/FlightColumn';
+import DropArea from './components/DropArea/DropArea';
 import UsageViz from './components/UsageViz';
 
 import { useAirplanes, useFlights } from '../../api/api';
@@ -20,7 +18,7 @@ export default function Schedule() {
 
   const SELECTED_AIRCRAFT_NAME = idx(aircraftData, (airData: any) => airData.data[0].ident) || '';
 
-  const coolData = {
+  const filteredFlightData: any = {
     state: flightData.state,
     data: allFlights.filter((f: any) => !rotation.map((r: any) => r.id).includes(f.id))
   };
@@ -63,27 +61,14 @@ export default function Schedule() {
     <>
       <DateHeader />
       <UsageViz rotation={rotation} />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
         <AircraftsColumn aircraftData={aircraftData} />
-        <DragDropContext onDragEnd={handleDrag}>
-          <Droppable droppableId="rotation">
-            {(provided) => (
-              <div ref={provided.innerRef}>
-                <RotationColumn
-                  selectedAircraftName={SELECTED_AIRCRAFT_NAME}
-                  rotation={rotation}
-                />
-              </div>
-            )}
-          </Droppable>
-          <Droppable droppableId="flight">
-            {(provided) => (
-              <div ref={provided.innerRef}>
-                <FlightColumn flightData={coolData} />
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <DropArea
+          handleDrag={handleDrag}
+          selectedAircraftName={SELECTED_AIRCRAFT_NAME}
+          rotation={rotation}
+          flightData={filteredFlightData}
+        />
       </div>
       <Footer />
     </>

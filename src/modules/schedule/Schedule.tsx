@@ -20,7 +20,6 @@ export default function Schedule() {
     state: flightData.state,
     data: allFlights.filter((f: any) => !rotation.map((r: any) => r.id).includes(f.id))
   };
-  console.log(coolData);
 
   function handleDrag(x: any) {
     console.log(x);

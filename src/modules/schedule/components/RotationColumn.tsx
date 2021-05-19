@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 import { Draggable } from 'react-beautiful-dnd';
+import FlightCard from '../shared/FlightCard';
 
 interface RotationColumnProps {
   selectedAircraftName: string,
@@ -28,7 +29,7 @@ export default function RotationColumn({
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
               >
-                {a.id}
+                <FlightCard flight={a} />
               </div>
             )}
           </Draggable>

@@ -5,14 +5,18 @@ import AircraftsColumn from './components/AircraftsColumn';
 import RotationColumn from './components/RotationColumn';
 import FlightColumn from './components/FlightColumn';
 
+import { useAirplanes, useFlights } from '../../api/api';
+
 export default function Schedule() {
-  // const [aircrafts, setAircrafts] = useState<any[]>([]);
+  const aircraftData = useAirplanes();
+  const flightData = useFlights();
+
   return (
     <>
       <DateHeader />
-      <AircraftsColumn />
+      <AircraftsColumn aircraftData={aircraftData} />
       <RotationColumn selectedAircraftName="hi" />
-      <FlightColumn />
+      <FlightColumn flightData={flightData} />
     </>
   );
 }

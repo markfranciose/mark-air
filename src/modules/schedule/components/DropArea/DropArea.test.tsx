@@ -21,6 +21,15 @@ const stubFlights: FlightType[] = [
     origin: 'ORD',
     readable_arrival: '25',
     readable_departure: '26'
+  },
+  {
+    id: '3',
+    arrivaltime: 6002,
+    departuretime: 6000,
+    destination: 'XXX',
+    origin: 'ATL',
+    readable_arrival: '11',
+    readable_departure: '22222'
   }
 ];
 
@@ -49,6 +58,31 @@ test('renders static UI elements', () => {
   const flightText = screen.getByText(/Available Flights/);
   expect(flightText).toBeInTheDocument();
 });
+
+test('renders cards, renders slice of card data', () => {
+  const TEST_NAME = "DATA TEST";
+  
+  render(
+    <DropArea
+      handleDrag={dragStub}
+      flightData={recievedData}
+      rotation={[]}
+      selectedAircraftName={TEST_NAME}
+    />
+  );
+
+  /** We should have the same static UI elements available */
+  const nameTest = screen.getByText(/DATA TEST/);
+  expect(nameTest).toBeInTheDocument();
+  const rotationText = screen.getByText(/Rotation:/);
+  expect(rotationText).toBeInTheDocument();
+  const flightText = screen.getByText(/Available Flights/);
+  expect(flightText).toBeInTheDocument();
+
+  /** The red meat here is testing the data interchange and display */
+
+
+})
 
 test('renders spinner for loading flight data', () => {
   const loadingData = {

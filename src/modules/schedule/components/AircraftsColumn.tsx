@@ -18,7 +18,7 @@ export default function AircraftsColumn({
 
   return (
     <div style={{ width: 300 }}>
-      { isLoading && <CircularProgress data-testid={'spinner'} /> }
+      { isLoading && <CircularProgress data-testid="spinner" /> }
       { isError && <ErrorCard errorMessage="Planes failed to fetch!" /> }
       { isDone
         && aircrafts.map((a: any) => <p key={a.ident}>{a.ident}</p>) }

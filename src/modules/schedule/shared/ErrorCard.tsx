@@ -11,8 +11,8 @@ export default function ErrorCard({
 }: ErrorCardProps) {
   return (
     <Card data-testid="error-card">
-      <Error />
-      <Typography>
+      <Error data-testid="error-icon" />
+      <Typography data-testid="error-message">
         { errorMessage }
       </Typography>
     </Card>

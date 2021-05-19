@@ -36,8 +36,7 @@ test('renders an error card with a failed fetch', () => {
     data: []
   };
   render(<AircraftsColumn aircraftData={errorData} />);
-  
+
   const errorCard = screen.getByTestId('error-card');
   expect(errorCard).toBeVisible();
 });
-

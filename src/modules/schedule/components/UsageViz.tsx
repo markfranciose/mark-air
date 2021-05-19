@@ -1,6 +1,7 @@
 import React from 'react';
 // @ts-ignore
 import HSBar from 'react-horizontal-stacked-bar-chart';
+import { Typography } from '@material-ui/core';
 
 export default function UsageViz({ rotation }: any) {
   if (isValid(rotation)) {
@@ -8,21 +9,21 @@ export default function UsageViz({ rotation }: any) {
     return (
       <>
         <p>{`valid ${util}`}</p>
-        <CoolChart rotation={rotation} />
+        <HorizontalBarChart rotation={rotation} />
       </>
     );
   }
-  return <p>invalid</p>;
+  return <Typography data-testid='invalid-rotation'>invalid rotation</Typography>;
 }
 
 function isValid(rotation: any) {
   if (rotation.length < 2) { return true; }
 
-  return checkTimes(rotation);
+  return isValidRotation(rotation);
 }
 
 /** The difference between the */
-function checkTimes(rotation: any) {
+function isValidRotation(rotation: any) {
   for (let i = 1; i < rotation.length; i += 1) {
     const departure = rotation[i].departuretime;
     const { origin } = rotation[i];
@@ -47,10 +48,10 @@ function calculateUtlization(rotation: any) {
 const COLOR_CODES = {
   IDLE: 'lightgrey',
   SCHEDULED: 'lightgreen',
-  TURN: 'lightpurple'
+  TURN: 'cyan'
 };
 
-function CoolChart({ rotation }: any) {
+function HorizontalBarChart({ rotation }: any) {
   function generateData() {
     if (!rotation) {
       return [{ value: 100, color: COLOR_CODES.IDLE }];
@@ -85,10 +86,14 @@ function CoolChart({ rotation }: any) {
   }
 
   const data = generateData();
-  console.log(data);
   return (
-    <HSBar
-      data={data}
-    />
+    <div
+      data-testid='valid-bar-chart'
+      style={{ width: 400 }}
+    >
+      <HSBar
+        data={data}
+      />
+    </div>
   );
 }

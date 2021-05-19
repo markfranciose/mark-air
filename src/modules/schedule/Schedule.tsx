@@ -11,18 +11,19 @@ import { useAirplanes, useFlights } from '../../api/api';
 
 export default function Schedule() {
   const [rotation, setRotation] = useState<any>([]);
-
   const aircraftData = useAirplanes();
   const flightData = useFlights();
-  const allFlights = flightData.data || [];
 
+  const allFlights = flightData.data || [];
   const SELECTED_AIRCRAFT_NAME = idx(aircraftData, (airData: any) => airData.data[0].ident) || '';
 
+  /** We remove flights already in rotation from 'available flights' */
   const filteredFlightData: any = {
     state: flightData.state,
     data: allFlights.filter((f: any) => !rotation.map((r: any) => r.id).includes(f.id))
   };
 
+  /** container function to decide which type of list (flight/rotation) ordering to change */
   function handleDrag(x: any) {
     const { destination, source } = x;
     if (!destination) { return; }
@@ -32,7 +33,9 @@ export default function Schedule() {
     const flightToRotation = destination.droppableId === 'rotation' && source.droppableId === 'flight';
     if (flightToFlight) { return; }
 
-    if (rotationToFlight) { removeFromRotation(x.draggableId); } else if (rotationToRotation) {
+    if (rotationToFlight) {
+      removeFromRotation(x.draggableId);
+    } else if (rotationToRotation) {
       reorderRotation(x.source.index, x.destination.index);
     } else if (flightToRotation) {
       addFlightToRotation(x.draggableId);

@@ -9,25 +9,24 @@ interface FlightCardProps {
 }
 
 export default function FlightCard({ flight }: FlightCardProps) {
-  console.log(flight);
   return (
     <Card>
       <CardHeader title={`Flight: ${flight.id}`} />
       <CardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography>
+            <Typography data-testid="origin-text">
               {flight.origin}
             </Typography>
-            <Typography>
+            <Typography data-testid="departure-time">
               {flight.readable_departure}
             </Typography>
           </div>
           <div>
-            <Typography>
+            <Typography data-testid="destination-text">
               {flight.destination}
             </Typography>
-            <Typography>
+            <Typography data-testid="arrival-text">
               {flight.readable_arrival}
             </Typography>
           </div>

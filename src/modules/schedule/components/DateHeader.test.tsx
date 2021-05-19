@@ -18,6 +18,4 @@ test('Date is "tomorrow"', () => {
   render(<DateHeader />);
   const TODAY = new Date().getTime();
   const TOMORROW = new Date(TODAY + 86400000);
-
-
 });

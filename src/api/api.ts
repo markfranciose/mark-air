@@ -21,7 +21,6 @@ function useDataFetch(url: string) {
   useEffect(() => {
     axios.get(url)
       .then((result: any) => {
-        console.log(20, result.data.data);
         setData({
           state: 'DONE',
           data: result.data.data

@@ -33,3 +33,7 @@ function useDataFetch(url: string) {
 
   return data;
 }
+
+export function getMoreFlights(offset: number) {
+  return axios.get(`${FLIGHT_URL}?offset=${offset}`);
+}

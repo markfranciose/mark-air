@@ -12,7 +12,7 @@ const successData = {
   ]
 };
 
-test('renders learn react link', () => {
+test('renders name of stubbed aircraft', () => {
   render(<AircraftsColumn aircraftData={successData} />);
   const aircraftName = screen.getByText(/ZXZX/i);
   expect(aircraftName).toBeInTheDocument();

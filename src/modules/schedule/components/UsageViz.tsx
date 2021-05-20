@@ -1,54 +1,33 @@
 import React from 'react';
 // @ts-ignore
 import HSBar from 'react-horizontal-stacked-bar-chart';
-import { Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 
-export default function UsageViz({ rotation }: any) {
-  if (isValid(rotation)) {
-    const util = calculateUtlization(rotation);
+import { isValidRotation } from '../../../helpers/helpers';
+
+export default function UsageViz({
+  rotation,
+  resetRotation
+}: any) {
+  if (isValidRotation(rotation)) {
     return (
-      <>
-        <p>{`valid ${util}`}</p>
-        <HorizontalBarChart rotation={rotation} />
-      </>
+      <HorizontalBarChart rotation={rotation} />
     );
   }
-  return <Typography data-testid='invalid-rotation'>invalid rotation</Typography>;
-}
-
-function isValid(rotation: any) {
-  if (rotation.length < 2) { return true; }
-
-  return isValidRotation(rotation);
-}
-
-/** The difference between the */
-function isValidRotation(rotation: any) {
-  for (let i = 1; i < rotation.length; i += 1) {
-    const departure = rotation[i].departuretime;
-    const { origin } = rotation[i];
-
-    const arrival = rotation[i - 1].arrivaltime;
-    const { destination } = rotation[i - 1];
-
-    const lessThan20MinuteOverlap = departure - arrival < 1200;
-    const wrongAirport = origin !== destination;
-
-    if (lessThan20MinuteOverlap || wrongAirport) { return false; }
-  }
-  return true;
-}
-
-function calculateUtlization(rotation: any) {
-  const time = rotation.reduce((acc: number, o: any) => acc + (o.arrivaltime - o.departuretime), 0);
-
-  return (time / 86400) * 100;
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Typography style={{ marginRight: 12 }} color="error" data-testid="invalid-rotation">invalid rotation</Typography>
+      <Button variant="outlined" onClick={resetRotation}>
+        Reset
+      </Button>
+    </div>
+  );
 }
 
 const COLOR_CODES = {
   IDLE: 'lightgrey',
   SCHEDULED: 'lightgreen',
-  TURN: 'cyan'
+  TURN: 'plum'
 };
 
 function HorizontalBarChart({ rotation }: any) {
@@ -88,7 +67,7 @@ function HorizontalBarChart({ rotation }: any) {
   const data = generateData();
   return (
     <div
-      data-testid='valid-bar-chart'
+      data-testid="valid-bar-chart"
       style={{ width: 400 }}
     >
       <HSBar

@@ -16,6 +16,12 @@ const useStyles = makeStyles(() => createStyles({
 export default function DateHeader() {
   const TODAY = new Date().getTime();
   const TOMORROW = new Date(TODAY + 86400000);
+  const TOMORROW_STRING = TOMORROW.toLocaleString(undefined, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
   const classes = useStyles();
 
@@ -30,7 +36,7 @@ export default function DateHeader() {
         data-testid="nav-back"
       />
       <Typography>
-        {`Flight Scheduling: ${TOMORROW.toLocaleString()}`}
+        {`Flight Scheduling: ${TOMORROW_STRING}`}
       </Typography>
       <NavigateNext
         onClick={alertBeta}

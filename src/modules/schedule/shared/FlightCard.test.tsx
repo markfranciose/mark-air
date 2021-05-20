@@ -4,7 +4,6 @@ import FlightCard from './FlightCard';
 import FlightType from '../../../types/flight';
 
 test('renders the passed flight data', () => {
-
   const flightStub: FlightType = {
     id: 'aaaa',
     arrivaltime: 1,

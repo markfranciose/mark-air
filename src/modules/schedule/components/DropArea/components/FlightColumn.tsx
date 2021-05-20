@@ -36,7 +36,7 @@ export default function FlightColumn({
         </Button>
       </div>
       <div style={{
-        height: '80vh', padding: 6, width: 300, overflow: 'auto'
+        height: '80vh', padding: 6, width: 314, overflow: 'auto'
       }}
       >
         { isLoading && <CircularProgress data-testid="spinner" /> }

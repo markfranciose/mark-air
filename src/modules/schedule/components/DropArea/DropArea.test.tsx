@@ -82,8 +82,8 @@ test('renders cards, renders slice of card data', () => {
   /** The red meat here is testing the data interchange and display */
   
   const originTextATL = screen.getAllByText(/ATL/);
-  expect(originTextATL).toHaveLength(2);
-  const allOrigins = getAllByTestId('origin-text');
+  expect(originTextATL).toHaveLength(3);
+  const allOrigins = screen.getAllByTestId('origin-text');
   expect(allOrigins).toHaveLength(3);
 
   /** This pattern can be repeated for all subsequent data elements

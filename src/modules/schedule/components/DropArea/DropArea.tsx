@@ -7,6 +7,7 @@ import FlightColumn from './components/FlightColumn';
 export default function DropArea({
   handleDrag,
   flightData,
+  onMoreClick,
   rotation,
   selectedAircraftName
 }: any) {
@@ -14,7 +15,10 @@ export default function DropArea({
     <DragDropContext onDragEnd={handleDrag}>
       <Droppable droppableId="rotation">
         {(provided) => (
-          <div ref={provided.innerRef}>
+          <div
+            style={{ height: '80vh', display: 'flex', flexDirection: 'column' }}
+            ref={provided.innerRef}
+          >
             <RotationColumn
               selectedAircraftName={selectedAircraftName}
               rotation={rotation}
@@ -25,7 +29,10 @@ export default function DropArea({
       <Droppable droppableId="flight">
         {(provided) => (
           <div ref={provided.innerRef}>
-            <FlightColumn flightData={flightData} />
+            <FlightColumn
+              flightData={flightData}
+              onMoreClick={onMoreClick}
+            />
           </div>
         )}
       </Droppable>

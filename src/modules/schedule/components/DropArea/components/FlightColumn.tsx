@@ -1,5 +1,5 @@
 import React from 'react';
-import { CircularProgress, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Typography } from '@material-ui/core';
 
 import { Draggable } from 'react-beautiful-dnd';
 
@@ -8,10 +8,12 @@ import FlightCard from '../../../shared/FlightCard';
 
 interface FlightColumnProps {
   flightData: any;
+  onMoreClick: () => void
 }
 
 export default function FlightColumn({
-  flightData
+  flightData,
+  onMoreClick
 }: FlightColumnProps) {
   const isLoading = flightData.state === 'LOADING';
   const isError = flightData.state === 'ERROR';
@@ -19,31 +21,45 @@ export default function FlightColumn({
 
   const { data: flights } = flightData;
   return (
-    <div style={{ height: '80vh', width: 300, overflow: 'auto' }}>
-      <Typography>
-        Available Flights
-      </Typography>
-      { isLoading && <CircularProgress data-testid="spinner" /> }
-      { isError && <ErrorCard errorMessage="Flights Failed to Fetch!" /> }
-      { isDone
-          && flights.map((a: any, index: number) => (
-            <Draggable
-              key={a.id}
-              draggableId={a.id}
-              index={index}
-            >
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                >
-                  <FlightCard flight={a} />
-                </div>
-              )}
-            </Draggable>
-          ))}
+    <>
+      <div style={{ display: 'flex' }}>
+        <Typography>
+          Available Flights
+        </Typography>
+        <Button
+          onClick={onMoreClick}
+          size="small"
+          variant="outlined"
+        >
+          Load More
+        </Button>
+      </div>
+      <div style={{
+        height: '80vh', padding: 6, width: 300, overflow: 'auto'
+      }}
+      >
+        { isLoading && <CircularProgress data-testid="spinner" /> }
+        { isError && <ErrorCard errorMessage="Flights Failed to Fetch!" /> }
+        { isDone
+            && flights.map((a: any, index: number) => (
+              <Draggable
+                key={a.id}
+                draggableId={a.id}
+                index={index}
+              >
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <FlightCard flight={a} />
+                  </div>
+                )}
+              </Draggable>
+            ))}
 
-    </div>
+      </div>
+    </>
   );
 }

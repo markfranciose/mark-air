@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Card, CardHeader, CardContent, Typography
 } from '@material-ui/core';
+import { FlightLand } from '@material-ui/icons';
 import FlightType from '../../../types/flight';
 
 interface FlightCardProps {
@@ -10,7 +11,7 @@ interface FlightCardProps {
 
 export default function FlightCard({ flight }: FlightCardProps) {
   return (
-    <Card>
+    <Card style={{ marginBottom: 6 }}>
       <CardHeader title={`Flight: ${flight.id}`} />
       <CardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -21,6 +22,9 @@ export default function FlightCard({ flight }: FlightCardProps) {
             <Typography data-testid="departure-time">
               {flight.readable_departure}
             </Typography>
+          </div>
+          <div>
+            <FlightLand />
           </div>
           <div>
             <Typography data-testid="destination-text">

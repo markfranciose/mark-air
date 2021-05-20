@@ -1,3 +1,7 @@
+/** the Schedule component is the main 'view' component
+ *  it holds the major application state, is the 'top-level'
+ *  for interaction between the various sub-components */
+
 import React, { useEffect, useState } from 'react';
 import idx from 'idx';
 import { Typography } from '@material-ui/core';
@@ -12,35 +16,38 @@ import { isValidRotation } from '../../helpers/helpers';
 
 export default function Schedule() {
   const [rotation, setRotation] = useState<any>([]);
-  const [coolFlights, setCoolFlights] = useState<any>([]);
+  const [allFlights, setAllFlights] = useState<any>([]);
+
+  /** initial data load */
   const aircraftData = useAirplanes();
   const flightData = useFlights();
 
   useEffect(() => {
     if (flightData.state === 'DONE') {
       const flights = flightData.data;
-      setCoolFlights(flights);
+      setAllFlights(flights);
     }
   }, [flightData]);
 
+  /** Simplying assumption that we only have one selected aircraft possible */
   const SELECTED_AIRCRAFT_NAME = idx(aircraftData, (airData: any) => airData.data[0].ident) || '';
 
   /** We remove flights already in rotation from 'available flights' */
   const filteredFlightData: any = {
     state: flightData.state,
-    data: coolFlights.filter((f: any) => !rotation.map((r: any) => r.id).includes(f.id))
+    data: allFlights.filter((f: any) => !rotation.map((r: any) => r.id).includes(f.id))
   };
 
-  /** container function to decide which type of list (flight/rotation) ordering to change */
+  /** switching function to decide which type of list (flight/rotation) ordering helper to use */
   function handleDrag(x: any) {
     const { destination, source } = x;
     if (!destination) { return; }
     const flightToFlight = destination.droppableId === 'flight' && source.droppableId === 'flight';
-    const rotationToRotation = source.droppableId === 'rotation' && source.droppableId === 'rotation';
+    const rotationToRotation = destination.droppableId === 'rotation' && source.droppableId === 'rotation';
     const rotationToFlight = destination.droppableId === 'flight' && source.droppableId === 'rotation';
     const flightToRotation = destination.droppableId === 'rotation' && source.droppableId === 'flight';
-    if (flightToFlight) { return; }
 
+    if (flightToFlight) { return; }
     if (rotationToFlight) {
       removeFromRotation(x.draggableId);
     } else if (rotationToRotation) {
@@ -57,7 +64,7 @@ export default function Schedule() {
 
   function addFlightToRotation(flightId: string, index: number) {
     const newRotation = Array.from(rotation);
-    const flight = coolFlights.find((x: any) => x.id === flightId);
+    const flight = allFlights.find((x: any) => x.id === flightId);
     newRotation.splice(index, 0, flight);
     setRotation(newRotation);
   }
@@ -79,11 +86,11 @@ export default function Schedule() {
   function resetRotation() { setRotation([]); }
 
   function handleMoreClick() {
-    getMoreFlights(coolFlights.length)
+    getMoreFlights(allFlights.length)
       .then((r: any) => {
         const moreFlights = r.data.data;
         if (moreFlights.length) {
-          setCoolFlights([...coolFlights, ...moreFlights]);
+          setAllFlights([...allFlights, ...moreFlights]);
         }
       })
       .catch(() => {
@@ -92,15 +99,20 @@ export default function Schedule() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div
+      data-testid="app-container"
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+    >
       <DateHeader />
       <UsageViz
         resetRotation={resetRotation}
         rotation={rotation}
       />
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: '100vw'
-      }}
+      <div
+        data-testid="row-container"
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: '100vw'
+        }}
       >
         <AircraftsColumn
           utilization={displayedUtilization}

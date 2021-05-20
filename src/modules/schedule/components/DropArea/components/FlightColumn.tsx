@@ -22,12 +22,13 @@ export default function FlightColumn({
   const { data: flights } = flightData;
   return (
     <>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Typography>
           Available Flights
         </Typography>
         <Button
           onClick={onMoreClick}
+          style={{ marginLeft: 12 }}
           size="small"
           variant="outlined"
         >
